@@ -24,6 +24,13 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
+  # Наказуємо Devise повертати помилки суворо у форматі JSON
+config.warden do |manager|
+  manager.failure_app = ->(env) {
+    [401, { 'Content-Type' => 'application/json' }, [{ error: env['warden'].message || 'Необхідна авторизація' }.to_json]]
+  }
+end
+
   config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
 
   # Configure the class responsible to send e-mails.
